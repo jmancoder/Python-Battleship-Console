@@ -1,3 +1,4 @@
+from asyncio import sleep
 import random
 
 def ValidatedPlayerInput():
@@ -66,6 +67,7 @@ def main():
     playerShips[playerShip[0]][playerShip[1]] = True
 
     # Generate random AI ship coordinates
+    sleep(0.5)
     print("Player 2 entered coordinates for their ship.")
     AIShips[random.randint(0, 4)][random.randint(0, 4)] = True
 
@@ -97,6 +99,7 @@ def main():
         shotsFired += 1
         
         # Generate random AI attempt coordinates
+        sleep(1)
         AIShot = [random.randint(0, 4), random.randint(0, 4)]
         
         # Check if the AI hit a ship and draw a visual grid of previous shots
@@ -114,6 +117,7 @@ def main():
 
     # Executes when the game ends
     print("Total shots fired:", shotsFired)
+    sleep(2)
 
 # Execute main() function
 if __name__=="__main__":
