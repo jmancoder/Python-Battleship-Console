@@ -1,5 +1,5 @@
 # Python Console Battleship
-A simple implementation of battleship that runs in the Python console. I created this as an academic project, but any feedback is welcomed.
+A simple implementation of battleship that runs in the Python console. I created this as an academic project, but any feedback is welcome.
 
 ## Requirements:
 Python 3.0 or later must be installed to run this program.
