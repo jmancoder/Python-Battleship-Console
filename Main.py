@@ -1,23 +1,5 @@
 import random
 
-shotsFired = 0
-
-# TODO: Optimize system so that it requires fewer multi-dimensional lists.
-playerShips = []
-AIShips = []
-playerShots = []
-AIShots = []
-
-# Initialize 2D coordinate grids
-for i in range(5):
-    boolList = [False]*5
-    playerShips.append(boolList)
-    AIShips.append(boolList)
-
-    intList = [0]*5
-    playerShots.append(intList)
-    AIShots.append(intList)
-
 def ValidatedPlayerInput():
     """
     Ensures that input coordinates are valid integers,
@@ -25,7 +7,7 @@ def ValidatedPlayerInput():
     """
     while True:
         try:
-            # Input x and y coords with an offset to account for zero-based indexing
+            # Input playerShot with an offset to account for zero-based indexing
             x = int(input("X: "))-1
             y = int(input("Y: "))-1
             
@@ -34,7 +16,7 @@ def ValidatedPlayerInput():
             # Must not have been entered before
             assert not playerShots[x][y]
         except:
-            print("Those coordinates are invalid! Try again.")
+            print("Those coordinates are invalid or already entered. Try again!")
         else:
             # Stop looping if coordinates are valid
             break
@@ -59,22 +41,36 @@ def DrawVisualGrid(TargetList):
         print(rowSymbols)
 
 def main():
-    print("Welcome to 2-player Battleships!")
-
-    # Store a global copy of the shotsFired variable
+    # Create global variables
+    global playerShips
+    global AIShips
+    global playerShots
+    global AIShots
     global shotsFired
+
+    # Initialize global variables
+    shotsFired = 0
+    for i in range(5):
+        # TODO: Optimize system so that it requires fewer multi-dimensional lists.
+        playerShips = [[False for j in range(5)] for j in range(5)]
+        AIShips = [[False for j in range(5)] for j in range(5)]
+        playerShots = [[0 for j in range(5)] for j in range(5)]
+        AIShots = [[0 for j in range(5)] for j in range(5)]
+
+    print("Welcome to 2-player Battleships!")
 
     # Store validated player ship coordinates
     # TODO: Add multiple ships with varying dimensions.
     print("Player 1 enter coordinates for your ship.")
-    coords = ValidatedPlayerInput()
-    playerShips[coords[0]][coords[1]] = True
+    playerShip = ValidatedPlayerInput()
+    playerShips[playerShip[0]][playerShip[1]] = True
 
     # Generate random AI ship coordinates
     print("Player 2 entered coordinates for their ship.")
     AIShips[random.randint(0, 4)][random.randint(0, 4)] = True
 
     print("Game is starting...")
+    
     # Execute main game loop.
     while True:
         # Increase total shot count
@@ -82,18 +78,18 @@ def main():
 
         print("Player 1 enter coordinates to fire upon.")
         # Get validated player shot coordinates
-        coords = ValidatedPlayerInput()
+        playerShot = ValidatedPlayerInput()
             
         # Check if the player hit a ship and draw a visual grid of previous shots
-        if AIShips[coords[0]][coords[1]] == True:
-            playerShots[coords[0]][coords[1]] = 2
+        if AIShips[playerShot[0]][playerShot[1]]:
+            playerShots[playerShot[0]][playerShot[1]] = 2
             DrawVisualGrid(playerShots)
             print("Hit! You have sunk player 2's ship.")
             # TODO: Determine if all of the AI ships have sunk.
             print("Player 1 wins!")
             break
         else:
-            playerShots[coords[0]][coords[1]] = 1
+            playerShots[playerShot[0]][playerShot[1]] = 1
             DrawVisualGrid(playerShots)
             print("Miss... switching players.")
 
@@ -101,19 +97,18 @@ def main():
         shotsFired += 1
         
         # Generate random AI attempt coordinates
-        shotX = random.randint(0, 5)
-        shotY = random.randint(0, 5)
+        AIShot = [random.randint(0, 4), random.randint(0, 4)]
         
         # Check if the AI hit a ship and draw a visual grid of previous shots
-        if playerShips[shotX][shotY]:
-            AIShots[coords[0]][coords[1]] = 2
+        if playerShips[AIShot[0]][AIShot[1]]:
+            AIShots[AIShot[0]][AIShot[1]] = 2
             DrawVisualGrid(AIShots)
             print("Hit! Player 2 has sunk your ship.")
             # TODO: Determine if all of the player ships have sunk.
             print("Player 2 wins!")
             break
         else:
-            AIShots[coords[0]][coords[1]] = 1
+            AIShots[AIShot[0]][AIShot[1]] = 1
             DrawVisualGrid(AIShots)
             print("Player 2 missed... switching players.")
 
